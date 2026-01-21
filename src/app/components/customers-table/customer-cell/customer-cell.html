@@ -1,0 +1,6 @@
+<span [ngClass]="{
+  'active': value === true,
+  'inactive': value === false
+}">
+  {{ value === true ? 'Yes' : value === false ? 'No' : value }}
+</span>
