@@ -8,10 +8,11 @@ import { CustomerService } from '../../services/customer.service';
 import { of } from 'rxjs';
 import { catchError, shareReplay } from 'rxjs/operators';
 import { CustomerCell } from './customer-cell/customer-cell';
-import { FormsModule, NgModel } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-customers-table',
@@ -23,7 +24,8 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
     CustomerCell,
     FormsModule,
     DragDropModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    CommonModule
   ],
   templateUrl: './customers-table.html',
   styleUrls: ['./customers-table.scss'],
