@@ -11,7 +11,7 @@ import { ThemeService } from './services/theme.service';
 export class App {
   protected readonly title = signal('app');
 
-  constructor(private theme: ThemeService) {
+  constructor(public theme: ThemeService) {
     this.theme.init();
   }
 }

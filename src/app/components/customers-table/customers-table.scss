@@ -1,0 +1,45 @@
+.mat-mdc-table {
+  background-color: transparent;
+}
+
+.mat-mdc-header-row {
+  background-color: var(--md-sys-color-surface-variant);
+}
+
+.mat-mdc-header-cell {
+  color: var(--md-sys-color-primary);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.mat-mdc-row {
+  border-bottom: 1px solid var(--md-sys-color-outline);
+}
+
+.mat-mdc-row:hover {
+  background-color: rgba(255, 138, 80, 0.08);
+}
+
+.mat-mdc-cell {
+  color: var(--md-sys-color-on-surface);
+}
+
+.mat-mdc-paginator {
+  background-color: transparent;
+  border-top: 1px solid var(--md-sys-color-outline);
+}
+
+.mat-mdc-paginator,
+.mat-mdc-paginator-page-size,
+.mat-mdc-paginator-range-label {
+  color: var(--md-sys-color-on-surface);
+}
+
+.mat-mdc-icon-button {
+  color: var(--md-sys-color-primary);
+}
+
+.mat-mdc-icon-button:hover {
+  background-color: rgba(255, 138, 80, 0.08);
+}

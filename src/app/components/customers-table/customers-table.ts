@@ -9,6 +9,7 @@ import { of } from 'rxjs';
 import { catchError, shareReplay } from 'rxjs/operators';
 import { CustomerCell } from './customer-cell/customer-cell';
 import { FormsModule, NgModel } from '@angular/forms';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-customers-table',
@@ -18,7 +19,8 @@ import { FormsModule, NgModel } from '@angular/forms';
     MatSortModule,
     MatPaginatorModule,
     CustomerCell,
-    FormsModule
+    FormsModule,
+    DragDropModule
   ],
   templateUrl: './customers-table.html',
   styleUrls: ['./customers-table.scss'],
