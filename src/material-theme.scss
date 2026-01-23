@@ -1,4 +1,10 @@
 @use '@angular/material' as mat;
 
-@include mat.core();
-@include mat.all-component-themes(mat.define-theme());
+html {
+  color-scheme: light dark;
+  @include mat.theme((
+    color: mat.$blue-palette,
+    typography: Roboto,
+    density: 0
+  ));
+}

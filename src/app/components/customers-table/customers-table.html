@@ -6,7 +6,7 @@
       [(ngModel)]="filterValue" 
       (input)="applyFilter(filterValue)">
   </div>
-  <div class="rounded-xl overflow-hidden bg-[var(--md-sys-color-surface)]">
+  <div>
     <table mat-table [dataSource]="dataSource" matSort>
 
       <ng-container matColumnDef="select">
