@@ -4,10 +4,13 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSelectModule } from '@angular/material/select';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { CommonModule } from '@angular/common';
+import { MatIconModule } from '@angular/material/icon';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-root',
-  imports: [CustomersTable, MatToolbarModule, MatSelectModule, MatFormFieldModule, CommonModule],
+  imports: [CustomersTable, MatToolbarModule, MatSelectModule, MatFormFieldModule, CommonModule, MatIconModule, MatRadioModule, MatMenuModule],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
