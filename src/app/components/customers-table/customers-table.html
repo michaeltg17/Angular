@@ -1,11 +1,22 @@
 <div>
   <div>
-    <input 
-      matInput 
-      placeholder="Filter customers..." 
-      [(ngModel)]="filterValue" 
-      (input)="applyFilter(filterValue)">
+    <mat-form-field>
+      <input 
+        matInput 
+        placeholder="Filter customers..." 
+        [(ngModel)]="filterValue" 
+        (input)="applyFilter(filterValue)">
+    </mat-form-field>
+
+    <button mat-icon-button color="primary" (click)="editCustomer()">
+      <mat-icon>edit</mat-icon>
+    </button>
+
+    <button mat-icon-button color="warn" (click)="deleteCustomer()">
+      <mat-icon>delete</mat-icon>
+    </button>
   </div>
+
   <div>
     <table mat-table [dataSource]="dataSource" matSort>
 

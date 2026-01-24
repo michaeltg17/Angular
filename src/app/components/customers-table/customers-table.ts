@@ -13,6 +13,9 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { SelectionModel } from '@angular/cdk/collections';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { CommonModule } from '@angular/common';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 @Component({
   selector: 'app-customers-table',
@@ -25,7 +28,10 @@ import { CommonModule } from '@angular/common';
     FormsModule,
     DragDropModule,
     MatCheckboxModule,
-    CommonModule
+    CommonModule,
+    MatButtonModule,
+    MatIconModule,
+    MatFormFieldModule
   ],
   templateUrl: './customers-table.html',
   styleUrls: ['./customers-table.scss'],
@@ -77,7 +83,6 @@ export class CustomersTable implements OnInit, AfterViewInit {
     this.filterValue = value.trim().toLowerCase();
     this.dataSource.filter = this.filterValue;
   }
-
   
   isAllSelected() {
     const numSelected = this.selection.selected.length
@@ -89,5 +94,13 @@ export class CustomersTable implements OnInit, AfterViewInit {
     this.isAllSelected()
       ? this.selection.clear()
       : this.dataSource.data.forEach(row => this.selection.select(row))
+  }
+
+  editCustomer() {
+
+  }
+
+  deleteCustomer() {
+
   }
 }
