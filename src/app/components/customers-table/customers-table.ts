@@ -16,6 +16,7 @@ import { CommonModule } from '@angular/common';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-customers-table',
@@ -31,7 +32,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     CommonModule,
     MatButtonModule,
     MatIconModule,
-    MatFormFieldModule
+    MatFormFieldModule,
+    MatInputModule
   ],
   templateUrl: './customers-table.html',
   styleUrls: ['./customers-table.scss'],
