@@ -8,7 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
-import { themeColors } from './models/theme';
+import { Theme, ThemeColor, themeColors } from './models/theme';
 
 @Component({
   selector: 'app-root',
@@ -27,21 +27,21 @@ import { themeColors } from './models/theme';
   styleUrl: './app.scss'
 })
 export class App {
-  selectedPalette = themeColors[1];
+  selectedTheme = themeColors[1];
 
   ngOnInit() {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme) this.selectedPalette = savedTheme;
-    document.documentElement.className = this.selectedPalette;
+    const savedTheme: Theme = localStorage.getItem('theme');
+    if (savedTheme) this.selectedTheme = savedTheme;
+    document.documentElement.className = this.selectedTheme;
   }
 
-  setTheme(theme: string) {
-    this.selectedPalette = theme;
+  setThemeColor(color: string) {
+    this.selectedTheme = theme;
     document.documentElement.className = theme;
     localStorage.setItem('theme', theme);
   }
 
-  setMode(mode: 'light' | 'dark') {
+  setThemeType(mode: 'light' | 'dark') {
     const html = document.documentElement;
     html.classList.remove('light', 'dark');
     html.classList.add(mode);
