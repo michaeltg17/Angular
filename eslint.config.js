@@ -1,43 +1,31 @@
-import tsPlugin from '@typescript-eslint/eslint-plugin';
-import angularPlugin from '@angular-eslint/eslint-plugin';
-import templatePlugin from '@angular-eslint/eslint-plugin-template';
-import prettierPlugin from 'eslint-plugin-prettier';
+// eslint.config.js
+import typescript from '@typescript-eslint/eslint-plugin';
+import tsParser from '@typescript-eslint/parser';
+import angularEslintPlugin from '@angular-eslint/eslint-plugin';
 
 export default [
-  // TypeScript files
   {
-    files: ['src/**/*.ts'], // <-- match all TS files recursively in src
+    files: ['*.ts'],
     languageOptions: {
-      parser: '@typescript-eslint/parser',
+      parser: tsParser,
       parserOptions: {
-        project: ['tsconfig.json'],
-        createDefaultProgram: true,
+        project: './tsconfig.json',
       },
     },
     plugins: {
-      '@typescript-eslint': tsPlugin,
-      '@angular-eslint': angularPlugin,
-      prettier: prettierPlugin,
+      '@typescript-eslint': typescript,
+      '@angular-eslint': angularEslintPlugin
     },
     rules: {
-      semi: ['error', 'always'],
-      '@typescript-eslint/semi': ['error', 'always'],
-      'prettier/prettier': ['error', { semi: true }],
+      'semi': ['error', 'always'],
+      'quotes': ['error', 'single'],
+      '@typescript-eslint/indent': ['error', 2],
     },
-    extends: [
-      'eslint:recommended',
-      'plugin:@typescript-eslint/recommended',
-      'plugin:@angular-eslint/recommended',
-      'plugin:prettier/recommended',
-    ],
   },
-
-  // Angular HTML templates
   {
-    files: ['src/**/*.html'], // <-- match all HTML files recursively in src
-    plugins: {
-      '@angular-eslint/template': templatePlugin,
+    files: ['*.html'],
+    rules: {
+      // optional: some HTML lint rules if you want
     },
-    extends: ['plugin:@angular-eslint/template/recommended'],
   },
 ];

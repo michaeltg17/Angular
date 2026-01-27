@@ -1,31 +1,16 @@
 {
-  "name": "app",
-  "version": "0.0.0",
+  "name": "angular-app",
+  "version": "1.0.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "lint": "eslint \"src/**/*.{ts,html}\"",
-    "lint:fix": "eslint \"src/**/*.{ts,html}\" --fix",
-    "format": "prettier --write \"src/**/*.{ts,html,css,scss}\""
-  },
-  "prettier": {
-    "printWidth": 100,
-    "singleQuote": true,
-    "overrides": [
-      {
-        "files": "*.html",
-        "options": {
-          "parser": "angular"
-        }
-      }
-    ]
+    "lint": "eslint \"src/**/*.ts\" --ext .ts",
+    "lint:fix": "eslint \"src/**/*.ts\" --ext .ts --fix"
   },
   "private": true,
-  "type": "module",
-  "packageManager": "npm@11.6.2",
   "dependencies": {
     "@angular/cdk": "~21.1.0",
     "@angular/common": "^21.1.0",
@@ -46,14 +31,15 @@
     "@angular/cli": "^21.1.0",
     "@angular/compiler-cli": "^21.1.0",
     "@angular/material": "^21.1.0",
+    "@eslint/js": "^9.39.2",
     "@typescript-eslint/eslint-plugin": "^8.54.0",
+    "@typescript-eslint/parser": "^8.54.0",
     "eslint": "^9.39.2",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.5",
+    "globals": "^17.2.0",
     "jsdom": "^27.1.0",
-    "prettier": "^3.8.1",
     "tailwindcss": "^4.1.18",
     "typescript": "~5.9.2",
+    "typescript-eslint": "^8.54.0",
     "vitest": "^4.0.8"
   }
 }

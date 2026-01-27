@@ -20,23 +20,9 @@ import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-customers-table',
-  imports: [
-    MatTableModule,
-    MatSnackBarModule,
-    MatSortModule,
-    MatPaginatorModule,
-    CustomerCell,
-    FormsModule,
-    DragDropModule,
-    MatCheckboxModule,
-    CommonModule,
-    MatButtonModule,
-    MatIconModule,
-    MatFormFieldModule,
-    MatInputModule,
-  ],
+  imports: [MatTableModule, MatSnackBarModule, MatSortModule, MatPaginatorModule, CustomerCell, FormsModule, DragDropModule, MatCheckboxModule, CommonModule, MatButtonModule, MatIconModule, MatFormFieldModule, MatInputModule],
   templateUrl: './customers-table.html',
-  styleUrls: ['./customers-table.scss'],
+  styleUrls: ['./customers-table.scss']
 })
 export class CustomersTable implements OnInit, AfterViewInit {
   columns = [
@@ -44,7 +30,7 @@ export class CustomersTable implements OnInit, AfterViewInit {
     { key: 'firstName', label: 'First Name' },
     { key: 'lastName', label: 'Last Name' },
     { key: 'email', label: 'Email' },
-    { key: 'isActive', label: 'Active' },
+    { key: 'isActive', label: 'Active' }
   ];
   displayedColumns = ['select', ...this.columns.map((c) => c.key)];
   selection = new SelectionModel<Customer>(true, []);
@@ -56,7 +42,7 @@ export class CustomersTable implements OnInit, AfterViewInit {
 
   constructor(
     private customerService: CustomerService,
-    private snackBar: MatSnackBar,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -65,13 +51,11 @@ export class CustomersTable implements OnInit, AfterViewInit {
       .pipe(
         shareReplay(1),
         catchError((err) => {
-          this.snackBar.open(
-            err?.status === 404 ? 'Customers file not found' : 'Failed to load customers',
-            'Close',
-            { duration: 4000 },
-          );
+          this.snackBar.open(err?.status === 404 ? 'Customers file not found' : 'Failed to load customers', 'Close', {
+            duration: 4000
+          });
           return of([]);
-        }),
+        })
       )
       .subscribe((customers) => {
         this.dataSource.data = customers;
@@ -96,9 +80,7 @@ export class CustomersTable implements OnInit, AfterViewInit {
   }
 
   toggleAllRows() {
-    this.isAllSelected()
-      ? this.selection.clear()
-      : this.dataSource.data.forEach((row) => this.selection.select(row));
+    this.isAllSelected() ? this.selection.clear() : this.dataSource.data.forEach((row) => this.selection.select(row));
   }
 
   editCustomer() {}
