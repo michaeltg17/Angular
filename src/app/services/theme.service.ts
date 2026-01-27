@@ -27,6 +27,7 @@ export class ThemeService {
     try {
       this.currentTheme = JSON.parse(raw);
       this.applyTheme();
+      // eslint-disable-next-line no-empty
     } catch {}
   }
 

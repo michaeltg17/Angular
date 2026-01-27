@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, inject } from '@angular/core';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -25,6 +25,9 @@ import { MatInputModule } from '@angular/material/input';
   styleUrls: ['./customers-table.scss']
 })
 export class CustomersTable implements OnInit, AfterViewInit {
+  private customerService = inject(CustomerService);
+  private snackBar = inject(MatSnackBar);
+
   columns = [
     { key: 'id', label: 'Id' },
     { key: 'firstName', label: 'First Name' },
@@ -35,15 +38,10 @@ export class CustomersTable implements OnInit, AfterViewInit {
   displayedColumns = ['select', ...this.columns.map((c) => c.key)];
   selection = new SelectionModel<Customer>(true, []);
   dataSource = new MatTableDataSource<Customer>();
-  filterValue: string = '';
+  filterValue = '';
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-
-  constructor(
-    private customerService: CustomerService,
-    private snackBar: MatSnackBar
-  ) {}
 
   ngOnInit() {
     this.customerService

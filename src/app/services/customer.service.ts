@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Customer } from '../models/customer';
@@ -7,9 +7,9 @@ import { Customer } from '../models/customer';
   providedIn: 'root'
 })
 export class CustomerService {
-  private readonly url = 'customers.json';
+  private http = inject(HttpClient);
 
-  constructor(private http: HttpClient) {}
+  private readonly url = 'customers.json';
 
   getCustomers(): Observable<Customer[]> {
     return this.http.get<Customer[]>(this.url);

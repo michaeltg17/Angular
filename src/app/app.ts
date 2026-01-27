@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CustomersTable } from './components/customers-table/customers-table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatSelectModule } from '@angular/material/select';
@@ -17,8 +17,7 @@ import { themeColors } from './models/theme';
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
-export class App {
-  constructor(themeService: ThemeService) {}
+export class App implements OnInit {
 
   ngOnInit() {
     this.themeService.loadTheme();
