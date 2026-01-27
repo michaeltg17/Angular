@@ -6,7 +6,10 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "lint": "eslint \"src/**/*.{ts,html}\"",
+    "lint:fix": "eslint \"src/**/*.{ts,html}\" --fix",
+    "format": "prettier --write \"src/**/*.{ts,html,css,scss}\""
   },
   "prettier": {
     "printWidth": 100,
@@ -21,6 +24,7 @@
     ]
   },
   "private": true,
+  "type": "module",
   "packageManager": "npm@11.6.2",
   "dependencies": {
     "@angular/cdk": "~21.1.0",
@@ -35,11 +39,19 @@
     "tslib": "^2.3.0"
   },
   "devDependencies": {
+    "@angular-eslint/eslint-plugin": "^21.1.0",
+    "@angular-eslint/eslint-plugin-template": "^21.1.0",
+    "@angular-eslint/template-parser": "^21.1.0",
     "@angular/build": "^21.1.0",
     "@angular/cli": "^21.1.0",
     "@angular/compiler-cli": "^21.1.0",
     "@angular/material": "^21.1.0",
+    "@typescript-eslint/eslint-plugin": "^8.54.0",
+    "eslint": "^9.39.2",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
     "jsdom": "^27.1.0",
+    "prettier": "^3.8.1",
     "tailwindcss": "^4.1.18",
     "typescript": "~5.9.2",
     "vitest": "^4.0.8"

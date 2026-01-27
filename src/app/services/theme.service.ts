@@ -1,14 +1,42 @@
-import { Theme } from "../models/theme";
+import { Injectable } from '@angular/core';
+import { Theme, ThemeColor, themeColors, ThemeType, themeTypes } from '../models/theme';
 
-class ThemeService {
-  private readonly STORAGE_KEY = 'theme';
+@Injectable({
+  providedIn: 'root',
+})
+export class ThemeService {
+  private readonly storageKey = 'theme';
+  currentTheme = new Theme('light', 'blue');
 
-  load(): Theme {
-    return loadTheme() ?? { type: 'light', color: 'violet' };
+  setThemeColor(color: ThemeColor) {
+    this.currentTheme = { ...this.currentTheme, color };
+    this.applyTheme();
+    this.persistTheme();
   }
 
-  apply(theme: Theme) {
-    applyThemeToDom(theme);
-    localStorage.setItem(this.STORAGE_KEY, JSON.stringify(theme));
+  setThemeType(type: ThemeType) {
+    this.currentTheme = { ...this.currentTheme, type };
+    this.applyTheme();
+    this.persistTheme();
+  }
+
+  loadTheme() {
+    const raw = localStorage.getItem(this.storageKey);
+    if (!raw) return;
+
+    try {
+      this.currentTheme = JSON.parse(raw);
+      this.applyTheme();
+    } catch {}
+  }
+
+  private applyTheme() {
+    const html = document.documentElement;
+    html.classList.remove(...themeTypes, ...themeColors);
+    html.classList.add(this.currentTheme.type, this.currentTheme.color);
+  }
+
+  private persistTheme() {
+    localStorage.setItem(this.storageKey, JSON.stringify(this.currentTheme));
   }
 }

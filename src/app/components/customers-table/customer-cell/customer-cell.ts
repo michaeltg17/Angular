@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './customer-cell.html',
-  styleUrls: ['./customer-cell.scss']
+  styleUrls: ['./customer-cell.scss'],
 })
 export class CustomerCell {
   @Input() value: string | boolean | number | null = null;

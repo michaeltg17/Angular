@@ -1,3 +1,5 @@
+import { capitalize } from '../utils/stringUtils';
+
 export const themeColors = [
   'red',
   'green',
@@ -11,11 +13,19 @@ export const themeColors = [
   'azure',
   'violet',
   'rose',
-] as const;
+];
+export type ThemeColor = (typeof themeColors)[number];
 
-export type ThemeColor = typeof themeColors[number];
+export const themeTypes = ['light', 'dark'];
+export type ThemeType = (typeof themeTypes)[number];
 
-export interface Theme {
-  type: 'light' | 'dark';
-  color: ThemeColor;
+export class Theme {
+  readonly name: string;
+
+  constructor(
+    public readonly type: ThemeType,
+    public readonly color: ThemeColor,
+  ) {
+    this.name = `${capitalize(type)} ${capitalize(color)}`;
+  }
 }

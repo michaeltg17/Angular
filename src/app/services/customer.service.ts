@@ -4,10 +4,9 @@ import { Observable } from 'rxjs';
 import { Customer } from '../models/customer';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CustomerService {
-
   private readonly url = 'customers.json';
 
   constructor(private http: HttpClient) {}
