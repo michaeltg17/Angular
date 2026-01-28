@@ -6,12 +6,14 @@
   </button>
 
   <mat-menu #colorMenu="matMenu" class="color-menu">
-    <div (click)="$event.stopPropagation()">
-      <mat-radio-group [value]="themeService.currentTheme.color" (change)="themeService.setThemeColor($event.value)">
-        <mat-radio-button *ngFor="let c of themeColors" [value]="c" class="color-radio">{{ c | titlecase }}</mat-radio-button>
-      </mat-radio-group>
-    </div>
+    <mat-radio-group [value]="themeService.currentTheme.color" (change)="themeService.setThemeColor($event.value)">
+      @for (c of themeColors; track c) {
+        <mat-radio-button [value]="c" class="color-radio">
+          {{ c | titlecase }}
+        </mat-radio-button>
+      }
+    </mat-radio-group>
   </mat-menu>
-</mat-toolbar>
 
+</mat-toolbar>
 <app-customers-table></app-customers-table>

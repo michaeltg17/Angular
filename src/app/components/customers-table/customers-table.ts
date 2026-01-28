@@ -78,10 +78,13 @@ export class CustomersTable implements OnInit, AfterViewInit {
   }
 
   toggleAllRows() {
+    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
     this.isAllSelected() ? this.selection.clear() : this.dataSource.data.forEach((row) => this.selection.select(row));
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   editCustomer() {}
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   deleteCustomer() {}
 }

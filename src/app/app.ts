@@ -13,11 +13,22 @@ import { themeColors } from './models/theme';
 
 @Component({
   selector: 'app-root',
-  imports: [CustomersTable, MatToolbarModule, MatSelectModule, MatFormFieldModule, CommonModule, MatIconModule, MatRadioModule, MatMenuModule, MatButtonModule],
+  imports: [
+    CustomersTable,
+    MatToolbarModule,
+    MatSelectModule,
+    MatFormFieldModule,
+    CommonModule,
+    MatIconModule,
+    MatRadioModule,
+    MatMenuModule,
+    MatButtonModule],
   templateUrl: './app.html',
   styleUrl: './app.scss'
 })
 export class App implements OnInit {
+  themeService = inject(ThemeService);
+  themeColors = themeColors;
 
   ngOnInit() {
     this.themeService.loadTheme();
