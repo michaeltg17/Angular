@@ -15,7 +15,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { DeleteDialog, DeleteDialogData } from '../delete-dialog/delete-dialog';
+import { ConfirmationDialog, ConfirmatonDialogData } from '../confirmation-dialog/confirmation-dialog';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 @Component({
@@ -106,14 +106,14 @@ export class CustomersTable implements OnInit, AfterViewInit {
   editCustomer() { }
 
   deleteCustomers() {
-    const dialogData: DeleteDialogData = {
+    const dialogData: ConfirmatonDialogData = {
       title: 'Delete customers',
       message: 'Do you really want to delete these customers?',
       confirmText: 'Delete',
       cancelText: 'Cancel'
     };
 
-    const dialogRef = this.dialog.open(DeleteDialog, {
+    const dialogRef = this.dialog.open(ConfirmationDialog, {
       data: dialogData,
       disableClose: true
     });
