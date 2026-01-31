@@ -1,70 +1,117 @@
-import { Injectable, inject } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
-import { Customer } from '../models/customer';
+import { Injectable, inject, signal, computed } from '@angular/core'
+import { HttpClient } from '@angular/common/http'
+import { Customer } from '../models/customer'
 
-@Injectable({
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class CustomerService {
-  private http = inject(HttpClient);
-  private readonly url = 'customers.json';
-  private customersData: Customer[] = [];
-  private loaded = false;
+  private http = inject(HttpClient)
+  private readonly url = '/api/customers'
 
-  private loadCustomers(): Observable<Customer[]> {
-    if (this.loaded) {
-      return of(this.customersData);
-    }
-    return this.http.get<Customer[]>(this.url).pipe(
-      tap((data) => {
-        this.customersData = [...data];
-        this.loaded = true;
-      })
-    );
+  private readonly customersSignal = signal<Customer[]>([])
+  private readonly loadedSignal = signal(false)
+  private readonly loadingSignal = signal(false)
+  private readonly errorSignal = signal<string | null>(null)
+
+  private readonly deleteSuccessSignal = signal(false)
+
+  readonly customers = computed(() => this.customersSignal())
+  readonly loading = computed(() => this.loadingSignal())
+  readonly error = computed(() => this.errorSignal())
+  readonly deleteSuccess = computed(() => this.deleteSuccessSignal())
+
+  private startOp() {
+    this.loadingSignal.set(true)
+    this.errorSignal.set(null)
   }
 
-  getCustomers(): Observable<Customer[]> {
-    return this.loadCustomers();
+  private endOp() {
+    this.loadingSignal.set(false)
   }
 
-  deleteCustomers(customerIds: number[]): Observable<void> {
-    return this.loadCustomers().pipe(
-      tap(() => {
-        this.customersData = this.customersData.filter(c => !customerIds.includes(c.id));
-      }),
-      map(() => void 0)
-    );
+  loadCustomers() {
+    if (this.loadedSignal()) return
+
+    this.startOp()
+
+    this.http.get<Customer[]>(this.url).subscribe({
+      next: data => {
+        this.customersSignal.set(data)
+        this.loadedSignal.set(true)
+        this.endOp()
+      },
+      error: err => {
+        this.errorSignal.set(
+          err.status === 404
+            ? 'Customers file not found'
+            : 'Failed to load customers'
+        )
+        this.endOp()
+      }
+    })
   }
 
-  addCustomer(customer: Customer): Observable<Customer> {
-    return this.loadCustomers().pipe(
-      tap(() => {
-        const maxId = this.customersData.reduce((max, c) => Math.max(max, c.id), 0);
-        customer.id = maxId + 1;
-        this.customersData.push(customer);
-      }),
-      map(() => customer)
-    );
+  getCustomers() {
+    this.loadCustomers()
+    return this.customers
   }
 
-  updateCustomer(customer: Customer): Observable<Customer> {
-    return this.loadCustomers().pipe(
-      tap(() => {
-        const index = this.customersData.findIndex(c => c.id === customer.id);
-        if (index !== -1) {
-          this.customersData[index] = customer;
-          console.log('Updated customer:', customer);
-        }
-      }),
-      map(() => customer)
-    );
+  getCustomerById(id: number) {
+    return computed(() =>
+      this.customersSignal().find(c => c.id === id)
+    )
   }
 
-  getCustomerById(id: number): Observable<Customer | undefined> {
-    return this.loadCustomers().pipe(
-      map(() => this.customersData.find(c => c.id === id))
-    );
+  addCustomer(customer: Customer) {
+    this.startOp()
+
+    this.http.post<Customer>(this.url, customer).subscribe({
+      next: created => {
+        this.customersSignal.update(c => [...c, created])
+        this.endOp()
+      },
+      error: () => {
+        this.errorSignal.set('Failed to add customer')
+        this.endOp()
+      }
+    })
+  }
+
+  updateCustomer(customer: Customer) {
+    this.startOp()
+
+    this.http.put<Customer>(`${this.url}/${customer.id}`, customer).subscribe({
+      next: updated => {
+        this.customersSignal.update(c =>
+          c.map(x => (x.id === updated.id ? updated : x))
+        )
+        this.endOp()
+      },
+      error: () => {
+        this.errorSignal.set('Failed to update customer')
+        this.endOp()
+      }
+    })
+  }
+
+  deleteCustomers(ids: number[]) {
+    this.startOp()
+
+    this.http.delete<void>(this.url, { body: ids }).subscribe({
+      next: () => {
+        this.customersSignal.update(c =>
+          c.filter(x => !ids.includes(x.id))
+        )
+        this.deleteSuccessSignal.set(true)
+        this.endOp()
+      },
+      error: () => {
+        this.errorSignal.set('Failed to delete customers')
+        this.endOp()
+      }
+    })
+  }
+
+  resetDeleteSuccess() {
+    this.deleteSuccessSignal.set(false)
   }
 }

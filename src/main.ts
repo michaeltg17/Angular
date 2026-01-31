@@ -6,9 +6,7 @@ import { worker } from './testing/msw/browser'
 
 async function bootstrap() {
   if (isDevMode()) {
-    await worker.start({
-      serviceWorker: { url: 'mockServiceWorker.js' }
-    })
+    await worker.start();
   }
 
   await bootstrapApplication(App, appConfig)

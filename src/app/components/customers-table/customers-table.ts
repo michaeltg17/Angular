@@ -1,12 +1,10 @@
-import { Component, OnInit, ViewChild, AfterViewInit, inject, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, inject, ChangeDetectionStrategy, ChangeDetectorRef, effect } from '@angular/core';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { Customer } from '../../models/customer';
 import { CustomerService } from '../../services/customer.service';
-import { of } from 'rxjs';
-import { catchError, shareReplay } from 'rxjs/operators';
 import { CustomerCell } from './customer-cell/customer-cell';
 import { FormsModule } from '@angular/forms';
 import { DragDropModule } from '@angular/cdk/drag-drop';
@@ -59,25 +57,28 @@ export class CustomersTable implements OnInit, AfterViewInit {
   dataSource = new MatTableDataSource<Customer>();
   filterValue = '';
 
+  customers = this.customerService.customers
+  loading = this.customerService.loading
+  error = this.customerService.error
+
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
+  readonly errorEffect = effect(() => {
+    const msg = this.error()
+    if (msg) {
+      this.snackBar.open(msg, 'Close', { duration: 4000 })
+    }
+  })
+
+  readonly tableEffect = effect(() => {
+    this.dataSource.data = this.customers()
+    this.applyFilter(this.filterValue)
+    this.changeDetectorRef.markForCheck()
+  })
+
   ngOnInit() {
-    this.customerService
-      .getCustomers()
-      .pipe(
-        shareReplay(1),
-        catchError((err) => {
-          this.snackBar.open(err?.status === 404 ? 'Customers file not found' : 'Failed to load customers', 'Close', {
-            duration: 4000
-          });
-          return of([]);
-        })
-      )
-      .subscribe((customers) => {
-        this.dataSource.data = customers;
-        this.applyFilter(this.filterValue);
-      });
+    this.customerService.loadCustomers();
   }
 
   ngAfterViewInit() {
@@ -102,7 +103,7 @@ export class CustomersTable implements OnInit, AfterViewInit {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
-  editCustomer() {}
+  editCustomer() { }
 
   deleteCustomers() {
     const dialogData: DeleteDialogData = {
@@ -118,15 +119,14 @@ export class CustomersTable implements OnInit, AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      if (confirmed) {
-        this.selection.clear();
-        this.changeDetectorRef.markForCheck();
-        this.customerService.deleteCustomers(this.selection.selected.map(row => row.id)).subscribe(() => {
-          this.snackBar.open('Customers deleted successfully', 'Close', {
-            duration: 3000
-          });
-        });
-      }
-    });
+      if (!confirmed) return
+
+      this.customerService.deleteCustomers(
+        this.selection.selected.map(r => r.id)
+      )
+
+      this.selection.clear()
+      this.changeDetectorRef.markForCheck()
+    })
   }
 }
