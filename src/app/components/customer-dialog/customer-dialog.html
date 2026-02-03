@@ -1,6 +1,5 @@
 <h2 mat-dialog-title>
-  {{ data.mode === dialogMode.Add ? 'Add Customer' : data.mode === dialogMode.Edit ? 'Edit Customer'
-  : 'View Customer' }}
+  {{ data.mode === dialogMode.Add ? 'Add Customer' : data.mode === dialogMode.Edit ? 'Edit Customer' : 'View Customer' }}
 </h2>
 
 <mat-dialog-content>
@@ -29,16 +28,8 @@
 </mat-dialog-content>
 
 <mat-dialog-actions align="end">
-  <button mat-stroked-button (click)="cancel()">
-    {{ data.mode === dialogMode.View ? 'Close' : 'Cancel' }}
-  </button>
-  <button
-    *ngIf="data.mode !== dialogMode.View"
-    mat-flat-button
-    color="warn"
-    [disabled]="!isValid()"
-    (click)="save()"
-  >
+  <button mat-stroked-button (click)="cancel()">{{ data.mode === dialogMode.View ? 'Close' : 'Cancel' }}</button>
+  <button *ngIf="data.mode !== dialogMode.View" mat-flat-button color="warn" [disabled]="!isValid()" (click)="save()">
     {{ data.mode === dialogMode.Add ? 'Add' : 'Save' }}
   </button>
 </mat-dialog-actions>

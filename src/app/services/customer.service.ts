@@ -40,9 +40,7 @@ export class CustomerService {
         this.endOp();
       },
       error: (err) => {
-        this.errorSignal.set(
-          err.status === 404 ? 'Customers file not found' : 'Failed to load customers',
-        );
+        this.errorSignal.set(err.status === 404 ? 'Customers file not found' : 'Failed to load customers');
         this.endOp();
       },
     });

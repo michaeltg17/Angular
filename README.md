@@ -1,7 +1,8 @@
 # Angular App
 
-- Angular 21.1
+- Angular 21
 - Angular Material 3
 - MSW
-- editorconfig
+- Prettier
 - angular-eslint
+- editorconfig

@@ -11,14 +11,7 @@ import { DialogMode } from '../../models/dialogMode';
 @Component({
   standalone: true,
   selector: 'app-customer-dialog',
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatDialogModule,
-    MatInputModule,
-    MatCheckboxModule,
-    MatButtonModule,
-  ],
+  imports: [CommonModule, ReactiveFormsModule, MatDialogModule, MatInputModule, MatCheckboxModule, MatButtonModule],
   templateUrl: './customer-dialog.html',
 })
 export class CustomerDialog {

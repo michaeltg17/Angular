@@ -10,14 +10,7 @@ import { themeColors, themeModes } from '../../models/theme';
 
 @Component({
   selector: 'app-theme-selector',
-  imports: [
-    MatSelectModule,
-    CommonModule,
-    MatIconModule,
-    MatRadioModule,
-    MatMenuModule,
-    MatButtonModule,
-  ],
+  imports: [MatSelectModule, CommonModule, MatIconModule, MatRadioModule, MatMenuModule, MatButtonModule],
   templateUrl: './theme-selector.html',
   styleUrl: './theme-selector.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,4 +1,13 @@
-import { Component, OnInit, ViewChild, AfterViewInit, inject, ChangeDetectionStrategy, ChangeDetectorRef, effect } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+  inject,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  effect,
+} from '@angular/core';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatSort, MatSortModule } from '@angular/material/sort';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -37,66 +46,65 @@ import { ActivatedRoute, Router } from '@angular/router';
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
-    MatDialogModule],
+    MatDialogModule,
+  ],
   templateUrl: './customers-table.html',
   styleUrls: ['./customers-table.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CustomersTable implements OnInit, AfterViewInit {
   private customerService = inject(CustomerService);
   private snackBar = inject(MatSnackBar);
   private dialog = inject(MatDialog);
   private changeDetectorRef = inject(ChangeDetectorRef);
-  private route = inject(ActivatedRoute)
-  private router = inject(Router)
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
 
   columns = [
     { key: 'id', label: 'Id' },
     { key: 'firstName', label: 'First Name' },
     { key: 'lastName', label: 'Last Name' },
     { key: 'email', label: 'Email' },
-    { key: 'isActive', label: 'Active' }
+    { key: 'isActive', label: 'Active' },
   ];
   displayedColumns = ['select', ...this.columns.map((c) => c.key)];
   selection = new SelectionModel<Customer>(true, []);
   dataSource = new MatTableDataSource<Customer>();
   filterValue = '';
 
-  customers = this.customerService.customers
-  loading = this.customerService.loading
-  error = this.customerService.error
+  customers = this.customerService.customers;
+  loading = this.customerService.loading;
+  error = this.customerService.error;
 
   @ViewChild(MatSort) sort!: MatSort;
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   readonly errorEffect = effect(() => {
-    const msg = this.error()
+    const msg = this.error();
     if (msg) {
-      this.snackBar.open(msg, 'Close', { duration: 4000 })
+      this.snackBar.open(msg, 'Close', { duration: 4000 });
     }
-  })
+  });
 
   readonly tableEffect = effect(() => {
-    this.dataSource.data = this.customers()
-    this.applyFilter(this.filterValue)
-    this.changeDetectorRef.markForCheck()
-  })
+    this.dataSource.data = this.customers();
+    this.applyFilter(this.filterValue);
+    this.changeDetectorRef.markForCheck();
+  });
 
   ngOnInit() {
-    this.customerService.loadCustomers()
+    this.customerService.loadCustomers();
 
-    this.route.paramMap.subscribe(params => {
-      const id = params.get('id')
-      if (!id) return
+    this.route.paramMap.subscribe((params) => {
+      const id = params.get('id');
+      if (!id) return;
 
-      const customer = this.customerService
-        .customers()
-        .find(c => c.id === +id)
+      const customer = this.customerService.customers().find((c) => c.id === +id);
 
-      if (!customer) return
+      if (!customer) return;
 
-      this.editCustomer(customer)
-    })
+      this.editCustomer(customer);
+    });
   }
 
   ngAfterViewInit() {
@@ -124,22 +132,33 @@ export class CustomersTable implements OnInit, AfterViewInit {
     const dialogRef = this.dialog.open(CustomerDialog, {
       data: { mode: DialogMode.Add },
       panelClass: 'customer-dialog',
-      disableClose: true
-    })
+      disableClose: true,
+    });
 
-    dialogRef.afterClosed().subscribe(result => {
-      if (!result) return
-      this.customerService.addCustomer(result)
-    })
+    dialogRef.afterClosed().subscribe((result) => {
+      if (!result) return;
+      this.customerService.addCustomer(result);
+    });
   }
 
-  editCustomer(customer: Customer) { if (this.selection.selected.length !== 1) return const dialogRef = this.dialog.open(CustomerDialog, { data: { mode: DialogMode.Edit, customer: customer }, panelClass: 'customer-dialog', disableClose: true }) dialogRef.afterClosed().subscribe(result => { if (!result) return this.customerService.updateCustomer(result) this.selection.clear() }) }
+  editCustome2r(customer: Customer) {
+    if (this.selection.selected.length !== 1) return;
+    const dialogRef = this.dialog.open(CustomerDialog, {
+      data: { mode: DialogMode.Edit, customer: customer },
+      panelClass: 'customer-dialog',
+      disableClose: true,
+    });
+    dialogRef.afterClosed().subscribe((result) => {
+      if (!result) return this.customerService.updateCustomer(result);
+      this.selection.clear();
+    });
+  }
 
   editCustomer() {
-    if (this.selection.selected.length !== 1) return
+    if (this.selection.selected.length !== 1) return;
 
-    const customer = this.selection.selected[0]
-    this.router.navigate(['/customers', customer.id])
+    const customer = this.selection.selected[0];
+    this.router.navigate(['/customers', customer.id]);
   }
 
   deleteCustomers() {
@@ -147,24 +166,22 @@ export class CustomersTable implements OnInit, AfterViewInit {
       title: 'Delete customers',
       message: 'Do you really want to delete these customers?',
       confirmText: 'Delete',
-      cancelText: 'Cancel'
+      cancelText: 'Cancel',
     };
 
     const dialogRef = this.dialog.open(ConfirmationDialog, {
       data: dialogData,
-      disableClose: true
+      disableClose: true,
     });
 
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
-      if (!confirmed) return
+      if (!confirmed) return;
 
-      this.customerService.deleteCustomers(
-        this.selection.selected.map(r => r.id)
-      )
+      this.customerService.deleteCustomers(this.selection.selected.map((r) => r.id));
 
-      this.selection.clear()
-      this.changeDetectorRef.markForCheck()
-    })
+      this.selection.clear();
+      this.changeDetectorRef.markForCheck();
+    });
   }
 
   viewCustomer(customer: Customer) {
@@ -172,8 +189,8 @@ export class CustomersTable implements OnInit, AfterViewInit {
       panelClass: ['customer-dialog', 'mode-view'],
       data: {
         mode: DialogMode.View,
-        customer
-      }
-    })
+        customer,
+      },
+    });
   }
 }
