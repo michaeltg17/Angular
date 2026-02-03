@@ -5,9 +5,10 @@ export const routes: Routes = [
   {
     path: 'customers',
     component: CustomersTable,
-  },
-  {
-    path: 'customers/:id',
-    component: CustomersTable,
+    children: [
+      { path: 'new', component: CustomersTable },
+      { path: ':id', component: CustomersTable },
+      { path: ':id/edit', component: CustomersTable },
+    ],
   },
 ];

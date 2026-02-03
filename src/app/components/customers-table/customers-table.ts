@@ -103,7 +103,7 @@ export class CustomersTable implements OnInit, AfterViewInit {
 
       if (!customer) return;
 
-      this.editCustomer(customer);
+      this.editCustomer2(customer);
     });
   }
 
@@ -141,7 +141,7 @@ export class CustomersTable implements OnInit, AfterViewInit {
     });
   }
 
-  editCustome2r(customer: Customer) {
+  editCustomer2(customer: Customer) {
     if (this.selection.selected.length !== 1) return;
     const dialogRef = this.dialog.open(CustomerDialog, {
       data: { mode: DialogMode.Edit, customer: customer },
@@ -156,7 +156,6 @@ export class CustomersTable implements OnInit, AfterViewInit {
 
   editCustomer() {
     if (this.selection.selected.length !== 1) return;
-
     const customer = this.selection.selected[0];
     this.router.navigate(['/customers', customer.id]);
   }

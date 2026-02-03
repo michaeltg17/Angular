@@ -34,9 +34,12 @@ export class CustomerDialog {
     validators: [Validators.required, Validators.email],
   });
 
-  isActive = new FormControl(this.data.customer?.isActive ?? true, {
-    nonNullable: true,
-  });
+  isActive = new FormControl(
+    { value: this.data.customer?.isActive ?? true, disabled: this.data.mode === DialogMode.View },
+    {
+      nonNullable: true,
+    },
+  );
 
   constructor() {
     if (this.data.mode === DialogMode.View) {
