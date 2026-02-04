@@ -12,7 +12,7 @@ import { DialogMode } from '../../models/dialogMode';
   standalone: true,
   selector: 'app-customer-dialog',
   imports: [CommonModule, ReactiveFormsModule, MatDialogModule, MatInputModule, MatCheckboxModule, MatButtonModule],
-  templateUrl: './customer-dialog.html',
+  templateUrl: './customer-dialog.html'
 })
 export class CustomerDialog {
   private dialogRef = inject(MatDialogRef<CustomerDialog>);
@@ -21,24 +21,24 @@ export class CustomerDialog {
 
   firstName = new FormControl(this.data.customer?.firstName ?? '', {
     nonNullable: true,
-    validators: Validators.required,
+    validators: Validators.required
   });
 
   lastName = new FormControl(this.data.customer?.lastName ?? '', {
     nonNullable: true,
-    validators: Validators.required,
+    validators: Validators.required
   });
 
   email = new FormControl(this.data.customer?.email ?? '', {
     nonNullable: true,
-    validators: [Validators.required, Validators.email],
+    validators: [Validators.required, Validators.email]
   });
 
   isActive = new FormControl(
     { value: this.data.customer?.isActive ?? true, disabled: this.data.mode === DialogMode.View },
     {
-      nonNullable: true,
-    },
+      nonNullable: true
+    }
   );
 
   constructor() {
@@ -64,7 +64,7 @@ export class CustomerDialog {
       firstName: this.firstName.value,
       lastName: this.lastName.value,
       email: this.email.value,
-      isActive: this.isActive.value,
+      isActive: this.isActive.value
     });
   }
 

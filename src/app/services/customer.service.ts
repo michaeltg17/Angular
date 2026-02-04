@@ -34,15 +34,15 @@ export class CustomerService {
     this.startOp();
 
     this.http.get<Customer[]>(this.url).subscribe({
-      next: (data) => {
+      next: data => {
         this.customersSignal.set(data);
         this.loadedSignal.set(true);
         this.endOp();
       },
-      error: (err) => {
+      error: err => {
         this.errorSignal.set(err.status === 404 ? 'Customers file not found' : 'Failed to load customers');
         this.endOp();
-      },
+      }
     });
   }
 
@@ -52,21 +52,21 @@ export class CustomerService {
   }
 
   getCustomerById(id: number) {
-    return computed(() => this.customersSignal().find((c) => c.id === id));
+    return computed(() => this.customersSignal().find(c => c.id === id));
   }
 
   addCustomer(customer: Customer) {
     this.startOp();
 
     this.http.post<Customer>(this.url, customer).subscribe({
-      next: (created) => {
-        this.customersSignal.update((c) => [...c, created]);
+      next: created => {
+        this.customersSignal.update(c => [...c, created]);
         this.endOp();
       },
       error: () => {
         this.errorSignal.set('Failed to add customer');
         this.endOp();
-      },
+      }
     });
   }
 
@@ -74,14 +74,14 @@ export class CustomerService {
     this.startOp();
 
     this.http.put<Customer>(`${this.url}/${customer.id}`, customer).subscribe({
-      next: (updated) => {
-        this.customersSignal.update((c) => c.map((x) => (x.id === updated.id ? updated : x)));
+      next: updated => {
+        this.customersSignal.update(c => c.map(x => (x.id === updated.id ? updated : x)));
         this.endOp();
       },
       error: () => {
         this.errorSignal.set('Failed to update customer');
         this.endOp();
-      },
+      }
     });
   }
 
@@ -90,14 +90,14 @@ export class CustomerService {
 
     this.http.delete<void>(this.url, { body: ids }).subscribe({
       next: () => {
-        this.customersSignal.update((c) => c.filter((x) => !ids.includes(x.id)));
+        this.customersSignal.update(c => c.filter(x => !ids.includes(x.id)));
         this.deleteSuccessSignal.set(true);
         this.endOp();
       },
       error: () => {
         this.errorSignal.set('Failed to delete customers');
         this.endOp();
-      },
+      }
     });
   }
 

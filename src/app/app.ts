@@ -7,6 +7,6 @@ import { ThemeSelector } from './components/theme-selector/theme-selector';
   selector: 'app-root',
   imports: [CustomersTable, MatToolbarModule, ThemeSelector],
   templateUrl: './app.html',
-  styleUrl: './app.scss',
+  styleUrl: './app.scss'
 })
 export class App {}

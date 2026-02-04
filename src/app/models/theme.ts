@@ -12,7 +12,7 @@ export const themeColors = [
   'spring-green',
   'azure',
   'violet',
-  'rose',
+  'rose'
 ];
 export type ThemeColor = (typeof themeColors)[number];
 
@@ -24,7 +24,7 @@ export class Theme {
 
   constructor(
     public readonly mode: ThemeMode,
-    public readonly color: ThemeColor,
+    public readonly color: ThemeColor
   ) {
     this.name = `${capitalize(mode)} ${capitalize(color)}`;
   }

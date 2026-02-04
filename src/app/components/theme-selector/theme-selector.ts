@@ -13,7 +13,7 @@ import { themeColors, themeModes } from '../../models/theme';
   imports: [MatSelectModule, CommonModule, MatIconModule, MatRadioModule, MatMenuModule, MatButtonModule],
   templateUrl: './theme-selector.html',
   styleUrl: './theme-selector.scss',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ThemeSelector implements OnInit {
   themeService = inject(ThemeService);

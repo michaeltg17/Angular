@@ -10,7 +10,7 @@ export const handlers = [
   }),
 
   http.get('/api/customers/:id', ({ params }) => {
-    const customer = customers.find((c) => c.id === Number(params['id']));
+    const customer = customers.find(c => c.id === Number(params['id']));
     return customer ? HttpResponse.json(customer) : new HttpResponse(null, { status: 404 });
   }),
 
@@ -28,15 +28,15 @@ export const handlers = [
     const updated = (await request.json()) as Customer;
     const id = Number(params['id']);
 
-    customers = customers.map((c) => (c.id === id ? updated : c));
+    customers = customers.map(c => (c.id === id ? updated : c));
 
     return HttpResponse.json(updated);
   }),
 
   http.delete('/api/customers', async ({ request }) => {
     const ids = (await request.json()) as number[];
-    customers = customers.filter((c) => !ids.includes(c.id));
+    customers = customers.filter(c => !ids.includes(c.id));
 
     return new HttpResponse(null, { status: 204 });
-  }),
+  })
 ];

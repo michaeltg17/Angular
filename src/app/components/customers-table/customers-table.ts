@@ -7,6 +7,7 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   effect,
+  computed
 } from '@angular/core';
 import { MatTableModule, MatTableDataSource } from '@angular/material/table';
 import { MatSort, MatSortModule } from '@angular/material/sort';
@@ -46,11 +47,11 @@ import { ActivatedRoute, Router } from '@angular/router';
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
-    MatDialogModule,
+    MatDialogModule
   ],
   templateUrl: './customers-table.html',
   styleUrls: ['./customers-table.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CustomersTable implements OnInit, AfterViewInit {
   private customerService = inject(CustomerService);
@@ -65,12 +66,13 @@ export class CustomersTable implements OnInit, AfterViewInit {
     { key: 'firstName', label: 'First Name' },
     { key: 'lastName', label: 'Last Name' },
     { key: 'email', label: 'Email' },
-    { key: 'isActive', label: 'Active' },
+    { key: 'isActive', label: 'Active' }
   ];
-  displayedColumns = ['select', ...this.columns.map((c) => c.key)];
+  displayedColumns = ['select', ...this.columns.map(c => c.key)];
   selection = new SelectionModel<Customer>(true, []);
   dataSource = new MatTableDataSource<Customer>();
   filterValue = '';
+  private dialogOpen = false;
 
   customers = this.customerService.customers;
   loading = this.customerService.loading;
@@ -92,19 +94,40 @@ export class CustomersTable implements OnInit, AfterViewInit {
     this.changeDetectorRef.markForCheck();
   });
 
+  readonly routeEffect = effect(() => {
+    const { id, isNew, isEdit } = this.routeState();
+    const customers = this.customers();
+
+    if (!customers.length) return;
+
+    if (isNew) {
+      this.openAddDialog();
+      return;
+    }
+
+    if (!id) return;
+
+    const customer = customers.find(c => c.id === +id);
+    if (!customer) return;
+
+    if (isEdit) {
+      this.openEditDialog(customer);
+    } else {
+      this.openViewDialog(customer);
+    }
+  });
+
+  routeState = computed(() => {
+    const snapshot = this.route.snapshot;
+    const id = snapshot.paramMap.get('id');
+    const isNew = snapshot.url.some(s => s.path === 'new');
+    const isEdit = snapshot.url.some(s => s.path === 'edit');
+
+    return { id, isNew, isEdit };
+  });
+
   ngOnInit() {
     this.customerService.loadCustomers();
-
-    this.route.paramMap.subscribe((params) => {
-      const id = params.get('id');
-      if (!id) return;
-
-      const customer = this.customerService.customers().find((c) => c.id === +id);
-
-      if (!customer) return;
-
-      this.editCustomer2(customer);
-    });
   }
 
   ngAfterViewInit() {
@@ -124,40 +147,59 @@ export class CustomersTable implements OnInit, AfterViewInit {
   }
 
   toggleAllRows() {
-    // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-    this.isAllSelected() ? this.selection.clear() : this.dataSource.data.forEach((row) => this.selection.select(row));
+    this.isAllSelected() ? this.selection.clear() : this.dataSource.data.forEach(row => this.selection.select(row));
   }
 
-  addCustomer() {
-    const dialogRef = this.dialog.open(CustomerDialog, {
-      data: { mode: DialogMode.Add },
-      panelClass: 'customer-dialog',
-      disableClose: true,
+  openViewDialog(customer: Customer) {
+    const ref = this.dialog.open(CustomerDialog, {
+      panelClass: ['customer-dialog', 'mode-view'],
+      data: { mode: DialogMode.View, customer }
     });
 
-    dialogRef.afterClosed().subscribe((result) => {
+    ref.afterClosed().subscribe(() => {
+      this.router.navigate(['/customers']);
+    });
+  }
+
+  openEditDialog(customer: Customer) {
+    const ref = this.dialog.open(CustomerDialog, {
+      data: { mode: DialogMode.Edit, customer },
+      panelClass: 'customer-dialog',
+      disableClose: true
+    });
+
+    ref.afterClosed().subscribe(result => {
+      this.router.navigate(['/customers']);
+      if (!result) return;
+      this.customerService.updateCustomer(result);
+    });
+  }
+
+  openAddDialog() {
+    const ref = this.dialog.open(CustomerDialog, {
+      data: { mode: DialogMode.Add },
+      panelClass: 'customer-dialog',
+      disableClose: true
+    });
+
+    ref.afterClosed().subscribe(result => {
+      this.router.navigate(['/customers']);
       if (!result) return;
       this.customerService.addCustomer(result);
     });
   }
 
-  editCustomer2(customer: Customer) {
-    if (this.selection.selected.length !== 1) return;
-    const dialogRef = this.dialog.open(CustomerDialog, {
-      data: { mode: DialogMode.Edit, customer: customer },
-      panelClass: 'customer-dialog',
-      disableClose: true,
-    });
-    dialogRef.afterClosed().subscribe((result) => {
-      if (!result) return this.customerService.updateCustomer(result);
-      this.selection.clear();
-    });
+  viewCustomer(customer: Customer) {
+    this.router.navigate(['/customers', customer.id]);
+  }
+
+  addCustomer() {
+    this.router.navigate(['/customers/new']);
   }
 
   editCustomer() {
     if (this.selection.selected.length !== 1) return;
-    const customer = this.selection.selected[0];
-    this.router.navigate(['/customers', customer.id]);
+    this.router.navigate(['/customers', this.selection.selected[0].id, 'edit']);
   }
 
   deleteCustomers() {
@@ -165,31 +207,21 @@ export class CustomersTable implements OnInit, AfterViewInit {
       title: 'Delete customers',
       message: 'Do you really want to delete these customers?',
       confirmText: 'Delete',
-      cancelText: 'Cancel',
+      cancelText: 'Cancel'
     };
 
     const dialogRef = this.dialog.open(ConfirmationDialog, {
       data: dialogData,
-      disableClose: true,
+      disableClose: true
     });
 
     dialogRef.afterClosed().subscribe((confirmed: boolean) => {
       if (!confirmed) return;
 
-      this.customerService.deleteCustomers(this.selection.selected.map((r) => r.id));
+      this.customerService.deleteCustomers(this.selection.selected.map(r => r.id));
 
       this.selection.clear();
       this.changeDetectorRef.markForCheck();
-    });
-  }
-
-  viewCustomer(customer: Customer) {
-    this.dialog.open(CustomerDialog, {
-      panelClass: ['customer-dialog', 'mode-view'],
-      data: {
-        mode: DialogMode.View,
-        customer,
-      },
     });
   }
 }
