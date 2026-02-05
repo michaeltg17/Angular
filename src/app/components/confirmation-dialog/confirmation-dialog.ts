@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 
-export interface ConfirmatonDialogData {
+export interface ConfirmationDialogData {
   title?: string;
   message?: string;
   confirmText?: string;
@@ -18,7 +18,7 @@ export interface ConfirmatonDialogData {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ConfirmationDialog {
-  data: ConfirmatonDialogData = inject(MAT_DIALOG_DATA);
+  data: ConfirmationDialogData = inject(MAT_DIALOG_DATA);
   dialogRef = inject(MatDialogRef<ConfirmationDialog>);
 
   confirm() {

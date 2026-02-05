@@ -25,7 +25,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { ConfirmationDialog, ConfirmatonDialogData } from '../confirmation-dialog/confirmation-dialog';
+import { ConfirmationDialog, ConfirmationDialogData } from '../confirmation-dialog/confirmation-dialog';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { CustomerDialog } from '../customer-dialog/customer-dialog';
 import { DialogMode } from '../../models/dialogMode';
@@ -147,7 +147,11 @@ export class CustomersTable implements OnInit, AfterViewInit {
   }
 
   toggleAllRows() {
-    this.isAllSelected() ? this.selection.clear() : this.dataSource.data.forEach(row => this.selection.select(row));
+    if (this.isAllSelected()) {
+      this.selection.clear();
+    } else {
+      this.dataSource.data.forEach(row => this.selection.select(row));
+    }
   }
 
   openViewDialog(customer: Customer) {
@@ -203,7 +207,7 @@ export class CustomersTable implements OnInit, AfterViewInit {
   }
 
   deleteCustomers() {
-    const dialogData: ConfirmatonDialogData = {
+    const dialogData: ConfirmationDialogData = {
       title: 'Delete customers',
       message: 'Do you really want to delete these customers?',
       confirmText: 'Delete',
