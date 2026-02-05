@@ -32,6 +32,7 @@ import { DialogMode } from '../../models/dialogMode';
 import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { filter, map, startWith } from 'rxjs';
+import { PendingChangesService } from '../../services/pending-changes.service';
 
 @Component({
   selector: 'app-customers-table',
@@ -62,6 +63,7 @@ export class CustomersTable implements OnInit, AfterViewInit {
   private changeDetectorRef = inject(ChangeDetectorRef);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private pendingService = inject(PendingChangesService);
 
   columns = [
     { key: 'id', label: 'Id' },
@@ -75,6 +77,7 @@ export class CustomersTable implements OnInit, AfterViewInit {
   dataSource = new MatTableDataSource<Customer>();
   filterValue = '';
   private dialogOpen = signal(false);
+  private activeDialogRef: MatDialogRef<CustomerDialog> | null = null;
 
   customers = this.customerService.customers;
   loading = this.customerService.loading;
@@ -99,6 +102,7 @@ export class CustomersTable implements OnInit, AfterViewInit {
   readonly routeEffect = effect(() => {
     const rs = this.routeState();
     const customers = this.customers();
+    console.log('[CustomersTable] routeEffect run, routeState=', rs, 'dialogOpen=', this.dialogOpen());
 
     if (this.dialogOpen()) return;
 
@@ -111,6 +115,8 @@ export class CustomersTable implements OnInit, AfterViewInit {
       const ref = this.openAddDialog();
       ref.afterClosed().subscribe(result => {
         this.dialogOpen.set(false);
+        this.pendingService.clear();
+        this.pendingService.clearActiveDialog();
         this.router.navigate(['/customers']);
         if (result) this.customerService.addCustomer(result);
       });
@@ -126,6 +132,8 @@ export class CustomersTable implements OnInit, AfterViewInit {
     const ref = isEdit ? this.openEditDialog(customer) : this.openViewDialog(customer);
     ref.afterClosed().subscribe(result => {
       this.dialogOpen.set(false);
+      this.pendingService.clear();
+      this.pendingService.clearActiveDialog();
       this.router.navigate(['/customers']);
       if (isEdit && result) this.customerService.updateCustomer(result);
     });
@@ -183,28 +191,82 @@ export class CustomersTable implements OnInit, AfterViewInit {
   openViewDialog(customer: Customer) {
     const ref = this.dialog.open(CustomerDialog, {
       panelClass: ['customer-dialog', 'mode-view'],
-      data: { mode: DialogMode.View, customer }
+      data: { mode: DialogMode.View, customer },
+      closeOnNavigation: false
     });
 
+    this.activeDialogRef = ref as MatDialogRef<CustomerDialog>;
+    this.pendingService.setActiveDialog(this.activeDialogRef);
+    ref.afterClosed().subscribe(() => {
+      this.activeDialogRef = null;
+      this.pendingService.clearActiveDialog();
+      this.pendingService.clear();
+    });
     return ref as MatDialogRef<CustomerDialog>;
   }
 
   openEditDialog(customer: Customer) {
     const ref = this.dialog.open(CustomerDialog, {
       data: { mode: DialogMode.Edit, customer },
-      panelClass: 'customer-dialog'
+      panelClass: 'customer-dialog',
+      closeOnNavigation: false
     });
 
+    this.activeDialogRef = ref as MatDialogRef<CustomerDialog>;
+    this.pendingService.setActiveDialog(this.activeDialogRef);
+    ref.afterClosed().subscribe(() => {
+      this.activeDialogRef = null;
+      this.pendingService.clearActiveDialog();
+      this.pendingService.clear();
+    });
     return ref as MatDialogRef<CustomerDialog>;
   }
 
   openAddDialog() {
     const ref = this.dialog.open(CustomerDialog, {
       data: { mode: DialogMode.Add },
-      panelClass: 'customer-dialog'
+      panelClass: 'customer-dialog',
+      closeOnNavigation: false
     });
 
+    this.activeDialogRef = ref as MatDialogRef<CustomerDialog>;
+    this.pendingService.setActiveDialog(this.activeDialogRef);
+    ref.afterClosed().subscribe(() => {
+      this.activeDialogRef = null;
+      this.pendingService.clearActiveDialog();
+      this.pendingService.clear();
+    });
     return ref as MatDialogRef<CustomerDialog>;
+  }
+
+  // Called by router CanDeactivate guard
+  canDeactivate(): boolean {
+    if (!this.activeDialogRef) return true;
+    const inst = this.activeDialogRef.componentInstance as {
+      hasUnsavedChanges?: () => boolean;
+      firstName?: { dirty?: boolean };
+      lastName?: { dirty?: boolean };
+      email?: { dirty?: boolean };
+      isActive?: { dirty?: boolean };
+    };
+    if (!inst) return true;
+    let unsaved = false;
+    if (typeof inst.hasUnsavedChanges === 'function') {
+      unsaved = inst.hasUnsavedChanges();
+    } else {
+      unsaved = !!(inst.firstName?.dirty || inst.lastName?.dirty || inst.email?.dirty || inst.isActive?.dirty);
+    }
+    if (!unsaved) return true;
+    const confirmLeave = window.confirm('You have unsaved changes. Leave without saving?');
+    if (confirmLeave) {
+      // close the dialog so it doesn't persist after navigation
+      try {
+        this.activeDialogRef.close();
+      } catch {
+        /* ignore */
+      }
+    }
+    return confirmLeave;
   }
 
   viewCustomer(customer: Customer) {

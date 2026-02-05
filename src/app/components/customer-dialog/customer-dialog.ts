@@ -1,4 +1,5 @@
 import { Component, inject, OnDestroy } from '@angular/core';
+import { PendingChangesService } from '../../services/pending-changes.service';
 import { FormControl, Validators, ReactiveFormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MatInputModule } from '@angular/material/input';
@@ -20,6 +21,7 @@ export class CustomerDialog implements OnDestroy {
   dialogMode = DialogMode;
 
   private _subs: { unsubscribe(): void }[] = [];
+  private pendingService = inject(PendingChangesService);
 
   firstName = new FormControl(this.data.customer?.firstName ?? '', {
     nonNullable: true,
@@ -57,9 +59,10 @@ export class CustomerDialog implements OnDestroy {
     const markDisable = () => {
       const anyDirty = this.firstName.dirty || this.lastName.dirty || this.email.dirty || this.isActive.dirty;
       this.dialogRef.disableClose = anyDirty;
+      this.pendingService.setPending(anyDirty);
     };
 
-    // subscribe to value changes to update disableClose
+    // subscribe to value changes to update disableClose and pending state
     this._subs.push(this.firstName.valueChanges.subscribe(markDisable));
     this._subs.push(this.lastName.valueChanges.subscribe(markDisable));
     this._subs.push(this.email.valueChanges.subscribe(markDisable));
@@ -90,5 +93,11 @@ export class CustomerDialog implements OnDestroy {
 
   ngOnDestroy(): void {
     this._subs.forEach(s => s.unsubscribe());
+    this.pendingService.clear();
+  }
+
+  // Expose unsaved state for navigation guards
+  hasUnsavedChanges(): boolean {
+    return this.firstName.dirty || this.lastName.dirty || this.email.dirty || this.isActive.dirty;
   }
 }
