@@ -23,9 +23,9 @@ test('clicking a row opens view dialog with readonly fields', async ({ page }) =
   const dialogContent = page.locator('mat-dialog-container mat-dialog-content');
   await expect(dialogContent.locator('input[readonly]')).toHaveCount(3);
 
-  // checkbox should be disabled in view mode
-  const checkbox = dialogContent.locator('mat-checkbox');
-  await expect(checkbox).toBeDisabled();
+  // checkbox should be disabled in view mode — check the internal input element
+  const checkboxInput = dialogContent.locator('mat-checkbox input[type="checkbox"]');
+  await expect(checkboxInput).toBeDisabled();
 
   // verify the dialog shows the expected customer name
   await expect(dialogContent.locator('input').first()).toHaveValue(/Jacob|Gary|Joann/i);
