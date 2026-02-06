@@ -12,6 +12,9 @@ npm-debug.log
 yarn-error.log
 
 # IDEs and editors
+playwright-report
+playwright-report/
+test-results/
 .idea/
 .project
 .classpath

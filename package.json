@@ -4,7 +4,9 @@
   "scripts": {
     "start": "ng serve",
     "format": "prettier --write \"src/**/*.{ts,html,css,scss,json,md}\"",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "test": "playwright test",
+    "test:install": "npx playwright install"
   },
   "private": true,
   "dependencies": {
@@ -35,7 +37,20 @@
     "tailwindcss": "^4.1.18",
     "typescript": "~5.9.2",
     "typescript-eslint": "8.50.1",
-    "vitest": "^4.0.8"
+    "vitest": "^4.0.8",
+    "@playwright/test": "^1.43.0"
+  },
+  "devDependenciesMeta": {
+    "@playwright/test": {
+      "optional": false
+    }
+  },
+  "playwright": {
+    "browsers": [
+      "chromium",
+      "firefox",
+      "webkit"
+    ]
   },
   "msw": {
     "workerDirectory": [
