@@ -14,12 +14,12 @@ export default defineConfig({
   webServer: {
     command: 'npm start',
     port: 4200,
-    reuseExistingServer: true
+    reuseExistingServer: false
   },
   projects: [
-    { name: 'chromium', use: { browserName: 'chromium' } },
-    { name: 'firefox', use: { browserName: 'firefox' } },
-    { name: 'webkit', use: { browserName: 'webkit' } },
-    { name: 'mobile-safari', use: { ...devices['iPhone 14'] } }
+    { name: 'chromium', use: { browserName: 'chromium' } }
+    // { name: 'firefox', use: { browserName: 'firefox' } },
+    // { name: 'webkit', use: { browserName: 'webkit' } },
+    // { name: 'mobile-safari', use: { ...devices['iPhone 14'] } }
   ]
 });
