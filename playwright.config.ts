@@ -17,10 +17,7 @@ export default defineConfig({
   webServer: {
     command: 'npm start',
     port: 4200,
-    reuseExistingServer: false,
-    env: {
-      ...(process.env as Record<string, string>)
-    }
+    reuseExistingServer: false
   },
   projects: [
     { name: 'chromium', use: { browserName: 'chromium' } }

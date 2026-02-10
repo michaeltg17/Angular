@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 
-export const getTitle = () => 'Angular App';
-
 @Injectable({
   providedIn: 'root'
 })

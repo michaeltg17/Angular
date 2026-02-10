@@ -7,9 +7,7 @@ const config = {
   concurrency: 1,
   mutate: ['src/app/services/title.service.ts'],
   commandRunner: {
-    command: 'node run-playwright.js'
-  },
-  logLevel: 'trace',
-  fileLogLevel: 'trace'
+    command: 'npx playwright test'
+  }
 };
 export default config;

@@ -14,6 +14,7 @@ yarn-error.log
 # IDEs and editors
 playwright-report
 playwright-report/
+reports
 test-results/
 .idea/
 .project
