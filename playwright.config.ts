@@ -1,7 +1,4 @@
 import { defineConfig, devices } from '@playwright/test';
-import process from 'process';
-
-console.log('Playwright process sees mutant:', process.env.__STRYKER_ACTIVE_MUTANT__);
 
 export default defineConfig({
   testDir: 'e2e',
@@ -15,9 +12,9 @@ export default defineConfig({
     viewport: { width: 1280, height: 720 }
   },
   webServer: {
-    command: 'npm start',
+    command: 'ng serve --watch=false',
     port: 4200,
-    reuseExistingServer: false
+    reuseExistingServer: true
   },
   projects: [
     { name: 'chromium', use: { browserName: 'chromium' } }

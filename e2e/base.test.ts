@@ -1,4 +1,5 @@
-import { test, expect } from '@playwright/test';
+import { expect } from '@playwright/test';
+import { test } from './fixtures';
 
 test('check mutant ID in browser', async ({ page }) => {
   // Navigate to your app (the initScript already ran before this)
