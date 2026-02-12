@@ -4,10 +4,9 @@ const config = {
   reporters: ['html', 'clear-text', 'progress'],
   testRunner: 'command',
   coverageAnalysis: 'off',
-  concurrency: 1,
-  mutate: ['src/app/services/title.service.ts'],
-  buildCommand
-  //mutate: ['src/app/services/title.service.ts', 'src/app/services/pending-changes.service.ts'],
+  buildCommand: 'node start-server.js',
+  //mutate: ['src/app/services/title.service.ts'],
+  mutate: ['src/app/services/title.service.ts', 'src/app/services/customer.service.ts'],
   //mutate: ['src/app/**/*.ts'],
   commandRunner: {
     command: 'node run-playwright.js'

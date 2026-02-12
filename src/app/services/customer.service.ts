@@ -11,7 +11,6 @@ export class CustomerService {
   private readonly loadedSignal = signal(false);
   private readonly loadingSignal = signal(false);
   private readonly errorSignal = signal<string | null>(null);
-
   private readonly deleteSuccessSignal = signal(false);
 
   readonly customers = computed(() => this.customersSignal());

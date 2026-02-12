@@ -15,3 +15,7 @@
 - Prettier
 - `angular-eslint`
 - EditorConfig
+
+### Badges
+
+[![Mutation testing badge](https://img.shields.io/endpoint?style=plastic&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fmichaeltg17%2FAngular%2Fmain)](https://dashboard.stryker-mutator.io/reports/github.com/michaeltg17/Angular/main)

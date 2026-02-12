@@ -2,8 +2,7 @@ import { defineConfig, devices } from '@playwright/test';
 
 export default defineConfig({
   testDir: 'e2e',
-  timeout: 30_000,
-  expect: { timeout: 5000 },
+  timeout: 30000,
   fullyParallel: false,
   reporter: [['list']],
   use: {
@@ -12,7 +11,7 @@ export default defineConfig({
     viewport: { width: 1280, height: 720 }
   },
   webServer: {
-    command: 'ng serve --watch=false',
+    command: 'npm start',
     port: 4200,
     reuseExistingServer: true
   },
@@ -21,5 +20,6 @@ export default defineConfig({
     // { name: 'firefox', use: { browserName: 'firefox' } },
     // { name: 'webkit', use: { browserName: 'webkit' } },
     // { name: 'mobile-safari', use: { ...devices['iPhone 14'] } }
-  ]
+  ],
+  workers: 1
 });
