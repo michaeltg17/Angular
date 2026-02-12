@@ -11,6 +11,8 @@ const config = {
   commandRunner: {
     command: 'node run-playwright.js'
   },
-  logLevel: 'trace'
+  logLevel: 'trace',
+  fileLogLevel: 'trace',
+  timeoutFactor: 3
 };
 export default config;
