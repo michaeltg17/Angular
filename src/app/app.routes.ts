@@ -1,8 +1,10 @@
 import { Routes } from '@angular/router';
 import { CustomersTable } from './components/customers-table/customers-table';
+import { UserPage } from './components/user-page/user-page';
 import { PendingChangesGuard } from './guards/pending-changes.guard';
 
 export const routes: Routes = [
+  { path: '', redirectTo: 'customers', pathMatch: 'full' },
   { path: 'customers', component: CustomersTable, canDeactivate: [PendingChangesGuard], runGuardsAndResolvers: 'always' },
   {
     path: 'customers/new',
@@ -21,5 +23,6 @@ export const routes: Routes = [
     component: CustomersTable,
     canDeactivate: [PendingChangesGuard],
     runGuardsAndResolvers: 'always'
-  }
+  },
+  { path: 'user', component: UserPage }
 ];
