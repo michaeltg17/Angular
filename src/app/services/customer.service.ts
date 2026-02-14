@@ -45,11 +45,6 @@ export class CustomerService {
     });
   }
 
-  getCustomers() {
-    this.loadCustomers();
-    return this.customers;
-  }
-
   getCustomerById(id: number) {
     return computed(() => this.customersSignal().find(c => c.id === id));
   }
